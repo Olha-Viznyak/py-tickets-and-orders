@@ -1,18 +1,16 @@
-from typing import Optional
-
+from typing import Optional, Any
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 
 
 def create_user(
-        username: str,
-        password: str,
-        email: Optional[str] = None,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None
+    username: str,
+    password: str,
+    email: Optional[str] = None,
+    first_name: Optional[str] = None,
+    last_name: Optional[str] = None
 ) -> None:
-    user = get_user_model().objects.create_user(username=username,
-                                                password=password)
+    User = get_user_model()
+    user = User.objects.create_user(username=username, password=password)
     if email:
         user.email = email
     if first_name:
@@ -22,18 +20,20 @@ def create_user(
     user.save()
 
 
-def get_user(user_id: int) -> User:
-    return get_user_model().objects.get(pk=user_id)
+def get_user(user_id: int) -> Any:
+    User = get_user_model()
+    return User.objects.get(pk=user_id)
 
 
-def update_user(user_id: int,
-                username: str = None,
-                password: str = None,
-                email: str = None,
-                first_name: str = None,
-                last_name: str = None,
-                ) -> None:
-    user = get_user_model().objects.get(pk=user_id)
+def update_user(
+    user_id: int,
+    username: Optional[str] = None,
+    password: Optional[str] = None,
+    email: Optional[str] = None,
+    first_name: Optional[str] = None,
+    last_name: Optional[str] = None,
+) -> None:
+    user = get_user(user_id)
     if username:
         user.username = username
     if password:
